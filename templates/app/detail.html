@@ -1,0 +1,64 @@
+{% extends "app/layout.html" %}
+
+{% block content %}
+{% load staticfiles %}
+{% if order_detail %}
+    <div>
+        {% if error_message %}
+            <h3>{{error_message}}</h3>
+        {% endif %}
+    </div>
+    <div>
+        {% if success_message %}
+            <h3>{{success_message}}</h3>
+        {% endif %}
+        {% if post_data %}
+            <h3>{{post_data}}</h3>
+        {% endif %}
+        <h1>Order Detail</h1>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <h2>Contact Information</h2>
+            <p><b>Name: </b>{{order_detail.order_contact_name}}</p>
+            <p><b>Phone: </b>{{order_detail.order_contact_phone}}</p>
+            <p><b>Name: </b>{{order_detail.order_contact_email}}</p>
+            <p><b>Date Placed: </b>{{order_detail.order_date}}</p>
+        </div>
+        <div class="col-md-6">
+            <h2>Item Detail</h2>
+            <table class="order_table">
+                <thead class="order_header_row">
+                    <tr>
+                        <td class="order_header_cell">SKU</td>
+                        <td class="order_header_cell">Description</td>
+                        <td class="order_header_cell">Quantity</td>
+                        <td class="order_header_cell">Paid?</td>
+                        <td class="order_header_cell">Options</td>
+                        <td class="order_header_cell">Status</td>
+                    </tr>
+                </thead>
+                {% csrf_token %}
+                {% for item in order_detail.order_item_set.all %}
+                    <tr class="order_row {{ item.resolve_status }}">
+                        <td class="order_cell">{{item.item_sku}}</td>
+                        <td class="order_cell">{{item.item_descr}}</td>
+                        <td class="order_cell">{{item.item_qty}}</td>
+                        {% if item.item_paid = 1 %}
+                            <td class="order_cell">Y</td>
+                        {% else %}
+                            <td class="order_cell">N</td>
+                        {% endif %}
+                        <td>
+                            <a href=" {% url 'itemupdate' %}?action=fulfilled&id={{ item.id }}"><img src= {%  static "app/img/CheckBox-24.png" %} /></a>
+                        </td>
+                        <td class="order_cell">{{ item.resolve_status }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+{% else %}
+    <p>No outstanding special orders found.</p>
+{% endif %} 
+{% endblock %}

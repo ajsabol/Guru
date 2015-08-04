@@ -1,0 +1,13 @@
+{% extends "app/layout.html" %}
+
+{% block content %}
+<div>
+    <h1>Well... This is a problem...</h1>
+    <h3>Critical errors were found in whatever you just did:</h3>
+    <ul>
+        {% for error in errors %}
+            <li>{{error}}</li>
+        {% endfor %}    
+    </ul>
+    <p>Perhaps try going back to the last page you were on and think about what you did wrong.</p>
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends "app/layout.html" %}
+
+{% block content %}
+
+{% if unordered_item_list %}
+    <div>
+        <table class="order_table">
+            <thead class="order_header_row">
+                <td>Order Date</td>
+                <td>Contact</td>
+                <td>Phone</td>
+                <td>Email</td>
+                <td>SKU</td>
+                <td>Description</td>
+                <td>Qty</td>
+                <td>Paid</td>         
+            </thead>
+            <tbody>
+                {% for item in unordered_item_list %}
+                    <tr class="order_row">
+                        <td>{{ order_list.objects.get(id=item.order_id).order_date }}</td>
+                        <td>{{ order_list.objects.get(id=item.order_id).order_contact_name }}</td>
+                        <td>{{ order_list.objects.get(id=item.order_id).order_contact_phone }}</td>
+                        <td>{{ order_list.objects.get(id=item.order_id).order_contact_email }}</td>
+                        <td>{{item.item_sku}}</td>
+                        <td>{{item.item_descr}}</td>
+                        <td>{{item.item_qty}}</td>
+                        <td>{{item.item_paid}}</td>
+                    </tr>
+            </tbody>
+        </table>
+    </div>
+{% else %}
+    <p>No outstanding special orders found.</p>
+{% endif %} 
+{% endblock %}
