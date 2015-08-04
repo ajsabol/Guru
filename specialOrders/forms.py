@@ -18,4 +18,4 @@ class BootstrapAuthenticationForm(AuthenticationForm):
                                    'placeholder':'Password'}))
 
 class foo():
-    bar = 3
+    bar = 6
