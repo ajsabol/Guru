@@ -49,12 +49,28 @@ class Order(models.Model):
             return "ordered"
         else: return "pending"
 
+    def determine_item_status(self):
+        numitems = len(self.order_item_set.all())
+        if len(self.order_item_set.filter(item_picked_up=1)) == numitems:
+            return 'fulfilled'
+        elif len(self.order_item_set.filter(item_arrived=1)) == numitems:
+            return 'arrived'
+        elif len(self.order_item_set.filter(item_ordered=1)) == numitems:
+            return 'ordered'
+        elif len(self.order_item_set.filter(item_ordered=0)) == numitems:
+            return 'outstanding'
+        else:
+            return 'mixed'
+
+
 class Vendor(models.Model):
     vendor_sap_id = models.IntegerField(primary_key=True)
     vendor_name = models.CharField(max_length=50)
     vendor_availability = models.CharField(max_length=1000)
+
     def __str__(self):
         return self.vendor_name
+
 
 class Order_item(models.Model):
     item_order = models.ForeignKey(Order)
@@ -80,7 +96,6 @@ class Order_item(models.Model):
             return "ordered"
         else:
             return "pending"
-
 
     def __str__(self):
         return str(self.item_sku)
