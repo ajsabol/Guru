@@ -99,3 +99,15 @@ def itemupdate(request):
                 return HttpResponseRedirect(reverse('detail', args=(order_item.item_order_id,)))
             else:
                 return None
+
+def item_manager(request):
+    from .models import Order, Order_item, Vendor
+
+    # build a list of outstanding items
+    items = Order_item.objects.all().filter(item_picked_up=0)
+    vendors = Vendor.objects.all()
+    context = {'items': items,
+               'vendors': vendors,
+               }
+
+    return render(request, 'app/items.html', context)

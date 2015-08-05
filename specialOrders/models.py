@@ -55,12 +55,10 @@ class Order(models.Model):
             return 'fulfilled'
         elif len(self.order_item_set.filter(item_arrived=1)) == numitems:
             return 'arrived'
-        elif len(self.order_item_set.filter(item_ordered=1)) == numitems:
-            return 'ordered'
         elif len(self.order_item_set.filter(item_ordered=0)) == numitems:
             return 'outstanding'
         else:
-            return 'mixed'
+            return 'in progress'
 
 
 class Vendor(models.Model):

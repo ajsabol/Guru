@@ -1,0 +1,31 @@
+{% extends "app/layout.html" %}
+
+{% block content %}
+
+{% if order_list %}
+    <div>
+        <table class="order_table">
+            <thead class="order_header_row">
+                <td class="order_header_cell">Request Date</td>
+                <td class="order_header_cell">Contact Name</td>
+                <td class="order_header_cell">Contact Phone</td>
+                <td class="order_header_cell">Contact Email</td>
+                <td class="order_header_cell">Items</td>
+                <td class="order_header_cell">Options</td>
+            </thead>
+                {% for order in order_list %}
+                    <tr class="order_row">
+                        <td class="order_cell"><a href="{% url 'detail' order.id %}">{{order.order_date}}</a></td>
+                        <td class="order_cell">{{order.order_contact_name}}</td>
+                        <td class="order_cell">{{order.order_contact_phone}}</td>
+                        <td class="order_cell">{{order.order_contact_email}}</td>          
+                        <td class="order_cell">{{order.order_item_set.count}}</td>
+                        <td class="order_cell">Buttons go here</td>
+                    </tr>
+                {% endfor %}
+        </table>
+    </div>
+{% else %}
+    <p>No special orders found.</p>
+{% endif %} 
+{% endblock %}

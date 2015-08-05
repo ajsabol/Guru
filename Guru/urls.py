@@ -20,6 +20,8 @@ urlpatterns = patterns('',
     url(r'^orders$', 'specialOrders.views.orders', name='orders'),
     url(r'^orders/(?P<order_id>[0-9]+)/$', 'specialOrders.views.order_detail', name='detail'),
     url(r'^itemupdate', 'specialOrders.views.itemupdate', name='itemupdate'), 
+    # Uncomment the next line to enable the admin:
+    url(r'^admin/', include(admin.site.urls), name='admin'),
     url(r'^login/$',
         'django.contrib.auth.views.login',
         {
@@ -42,8 +44,7 @@ urlpatterns = patterns('',
     # Uncomment the admin/doc line below to enable admin documentation:
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
 
-    # Uncomment the next line to enable the admin:
-    url(r'^admin/', include(admin.site.urls)),
+
 
 
 )
