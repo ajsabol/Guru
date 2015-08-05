@@ -16,6 +16,3 @@ class BootstrapAuthenticationForm(AuthenticationForm):
                                widget=forms.PasswordInput({
                                    'class': 'form-control',
                                    'placeholder':'Password'}))
-
-class peanuts():
-	almonds = "yiss"
