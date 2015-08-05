@@ -101,13 +101,9 @@ def itemupdate(request):
                 return None
 
 def item_manager(request):
-    from .models import Order, Order_item, Vendor
+    from .forms import OrderForm
 
-    # build a list of outstanding items
-    items = Order_item.objects.all().filter(item_picked_up=0)
-    vendors = Vendor.objects.all()
-    context = {'items': items,
-               'vendors': vendors,
-               }
+    context = {'orderform' : OrderForm}
 
     return render(request, 'app/items.html', context)
+

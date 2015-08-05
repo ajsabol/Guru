@@ -39,6 +39,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'specialOrders',
     'debug_toolbar',
+    'django_filters',
 )
 
 MIDDLEWARE_CLASSES = (

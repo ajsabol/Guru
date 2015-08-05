@@ -12,16 +12,16 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    # Examples:
     url(r'^ind$','specialOrders.views.index',name='indexerino'),
     url(r'^$', 'specialOrders.views.home', name='home'),
     url(r'^contact$', 'specialOrders.views.contact', name='contact'),
     url(r'^about', 'specialOrders.views.about', name='about'),
     url(r'^orders$', 'specialOrders.views.orders', name='orders'),
     url(r'^orders/(?P<order_id>[0-9]+)/$', 'specialOrders.views.order_detail', name='detail'),
-    url(r'^itemupdate', 'specialOrders.views.itemupdate', name='itemupdate'), 
-    # Uncomment the next line to enable the admin:
+    url(r'^itemupdate', 'specialOrders.views.itemupdate', name='itemupdate'),
+    url(r'^items', 'specialOrders.views.item_manager', name='items'),
     url(r'^admin/', include(admin.site.urls), name='admin'),
+    url(r'^neworder', 'specialOrders.views.new_order', name='neworder'),
     url(r'^login/$',
         'django.contrib.auth.views.login',
         {
