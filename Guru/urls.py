@@ -21,7 +21,7 @@ urlpatterns = patterns('',
     url(r'^itemupdate', 'specialOrders.views.itemupdate', name='itemupdate'),
     url(r'^items', 'specialOrders.views.item_manager', name='items'),
     url(r'^admin/', include(admin.site.urls), name='admin'),
-    url(r'^neworder', 'specialOrders.views.new_order', name='neworder'),
+    url(r'^neworder', 'specialOrders.views.new_order_entry', name='neworder'),
     url(r'^login/$',
         'django.contrib.auth.views.login',
         {

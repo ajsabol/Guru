@@ -101,9 +101,29 @@ def itemupdate(request):
                 return None
 
 def item_manager(request):
-    from .forms import OrderForm
+    from .filters import ItemFilter
+    from .models import Order_item
+    f = ItemFilter(request.GET, queryset=Order_item.objects.all())
 
-    context = {'orderform' : OrderForm}
+    context = {'filter' : f}
 
     return render(request, 'app/items.html', context)
+
+def new_order_entry(request):
+    from .models import Order, Order_item
+    from .forms import OrderForm
+
+    form = OrderForm
+    context = {'form': form}
+    return render(request, 'app/neworder.html', context)
+
+
+
+
+
+
+
+
+
+
 

@@ -25,3 +25,4 @@ class BootstrapAuthenticationForm(AuthenticationForm):
 class OrderForm(forms.ModelForm):
     class Meta:
         model = Order
+        fields = ['order_date', 'order_contact_name', 'order_contact_phone']
