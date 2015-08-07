@@ -110,14 +110,47 @@ def item_manager(request):
     return render(request, 'app/items.html', context)
 
 def new_order_entry(request):
-    from .models import Order, Order_item
-    from .forms import OrderForm
+    from .models import Vendor
+    from .utils import order_validator
 
-    form = OrderForm
-    context = {'form': form}
+    context = {}
+
+    if request.POST:
+        if request.POST['add']:
+            # Validate the supplied order info
+            order_info = {
+                'order_contact_name': request.POST['order_contact_name'],
+                'order_contact_phone': request.POST['order_contact_phone'],
+                'order_contact_email': request.POST['order_contact_email'],
+            }
+            ov = order_validator(order_info, items=None)
+            if len(ov['errors']) > 0:
+                context['errors'] = ov['errors']
+            context['resub_order_info'] = ov['order_info']
+
+            # Validate the supplied item info
+            orderitems = {}
+
+            orderitems['skus'] = request.POST.getlist('itemSKU')
+            orderitems['descrs'] = request.POST.getlist('itemDescr')
+            orderitems['vendors'] = request.POST.getlist('itemVendor')
+            orderitems['qtys'] = request.POST.getlist('itemQty')
+            orderitems['paids'] = request.POST.getlist('itemPaid')
+
+            context['orderitems'] = orderitems
+
+
+    # Django templates (and Python in general don't support anything quite like 'while' loops, so we'll use
+    # a range instead that we'll 'for' over in the template to add additional item rows
+    context['num_other_items'] = range(1, 3)
+    context['vendors'] = Vendor.objects.all()
+
     return render(request, 'app/neworder.html', context)
 
-
+def new_order_submit(request):
+    itemlist = request.POST.getlist('item')
+    context = {'itemlist': itemlist}
+    return render(request, 'app/neworder.html', context)
 
 
 

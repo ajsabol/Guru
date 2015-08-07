@@ -2,7 +2,49 @@
 
 {% block content %}
 
-{{ form }}
+{% if errors %}
+    <p><strong> Errors were found...</strong></p>
+    <ul>
+        {% for error in errors %}
+            <li>{{ error }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
+
+    <form action="{% url 'neworder' %}" method="post">
+    {% csrf_token %}
+    <label for="order_contact_name">Name: </label>
+    <input type="text" name="order_contact_name" id="order_contact_name" value="{{ resub_order_info.order_contact_name }}" maxlength="55" /><br />
+    <label for="order_contact_phone">Phone Number: </label>
+    <input type="tel" name="order_contact_phone" id="order_contact_phone" value="{{ resub_order_info.order_contact_phone }}" /><br />
+    <label for="order_contact_email">Email Address: </label>
+    <input type="email" name="order_contact_email" id="order_contact_email" value="{{ resub_order_info.order_contact_email }}" /><br />
+
+    <table>
+        <tr>
+            <th>SKU</th>
+            <th>Item Description</th>
+            <th>Vendor</th>
+            <th>Quantity</th>
+            <th>Paid?</th>
+        </tr>
+
+        {% for i in num_other_items %}
+            <tr>
+                <td><input type="text" id="itemSKU" name="itemSKU" /></td>
+                <td><input type="text" id="itemDescr" name="itemDescr" /></td>
+                <td><select id="itemVendor" name="itemVendor">
+                    {% for vendor in vendors %}
+                        <option value="{{ vendor.id }}">{{ vendor.vendor_name }}</option>
+                    {% endfor %}
+                </select></td>
+                <td><input type="number" id="itemQty" name="itemQty" /></td>
+                <td><input type="checkbox" id="itemPaid" name="itemPaid" /></td>
+            </tr>
+        {% endfor %}
+    </table>
+    <input type="submit" value="Submit" name="submit"/><input type="submit" value="Add More Items" name="add" />
+</form>
 
 
 {% endblock %}
