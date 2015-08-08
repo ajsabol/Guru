@@ -110,12 +110,15 @@ def item_manager(request):
     return render(request, 'app/items.html', context)
 
 def new_order_entry(request):
+    from django.forms import formset_factory
     from .models import Vendor
     from .utils import order_validator
+    from .forms import ItemOrderForm
 
     context = {}
+    
 
-    if request.POST:
+    if request.method == "POST":
         if request.POST['add']:
             # Validate the supplied order info
             order_info = {
@@ -127,22 +130,16 @@ def new_order_entry(request):
             if len(ov['errors']) > 0:
                 context['errors'] = ov['errors']
             context['resub_order_info'] = ov['order_info']
+            # Deal with items...
+            ItemOrderFormset = formset_factory(ItemOrderForm, extra=2)
+            item_formset = ItemOrderFormset(request.POST, request.FILES)
+        elif request.POST['submit']:
+            foo = 'bar'    
+    else:
+        ItemOrderFormset = formset_factory(ItemOrderForm, extra=2)
+        item_formset = ItemOrderFormset()         
 
-            # Validate the supplied item info
-            orderitems = {}
-
-            orderitems['skus'] = request.POST.getlist('itemSKU')
-            orderitems['descrs'] = request.POST.getlist('itemDescr')
-            orderitems['vendors'] = request.POST.getlist('itemVendor')
-            orderitems['qtys'] = request.POST.getlist('itemQty')
-            orderitems['paids'] = request.POST.getlist('itemPaid')
-
-            context['orderitems'] = orderitems
-
-
-    # Django templates (and Python in general don't support anything quite like 'while' loops, so we'll use
-    # a range instead that we'll 'for' over in the template to add additional item rows
-    context['num_other_items'] = range(1, 3)
+    context['item_formset'] = item_formset
     context['vendors'] = Vendor.objects.all()
 
     return render(request, 'app/neworder.html', context)
