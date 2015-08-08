@@ -7,7 +7,7 @@ def email_validator(email):
         return False
 
 
-def order_validator(order_info, items=None):
+def order_validator(order_info):
     import re
 
     errors = []
@@ -43,9 +43,3 @@ def order_validator(order_info, items=None):
             else:
                 errors.append("The provided email address is invalid")
     return {'order_info': checked_order_info, 'errors': errors}
-
-dummy_info = {
-    'order_contact_name': 'Steve',
-    'order_contact_phone': '4606',
-    'order_contact_email': 'steve@live.com',
-}

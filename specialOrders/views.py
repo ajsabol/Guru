@@ -115,8 +115,8 @@ def new_order_entry(request):
     from .utils import order_validator
     from .forms import ItemOrderForm
 
-    context = {}
-    
+    formset = formset_factory(ItemOrderForm, extra=2)
+    context = dict()
 
     if request.method == "POST":
         if request.POST['add']:
@@ -126,18 +126,24 @@ def new_order_entry(request):
                 'order_contact_phone': request.POST['order_contact_phone'],
                 'order_contact_email': request.POST['order_contact_email'],
             }
-            ov = order_validator(order_info, items=None)
+            ov = order_validator(order_info)
             if len(ov['errors']) > 0:
                 context['errors'] = ov['errors']
             context['resub_order_info'] = ov['order_info']
-            # Deal with items...
-            ItemOrderFormset = formset_factory(ItemOrderForm, extra=2)
-            item_formset = ItemOrderFormset(request.POST, request.FILES)
+
+            # Make a copy of the POST dict so we can edit the TOTAL_FORMS pram and resubmit the form to the template
+            post_copy = request.POST.copy()
+            submitted_formset = formset(post_copy, prefix="items")
+            if not submitted_formset.is_valid():
+                context['item_errors'] = submitted_formset.errors
+            post_copy['items-TOTAL_FORMS'] = int(post_copy['items-TOTAL_FORMS']) + 2
+            item_formset = formset(post_copy, prefix="items")
+
         elif request.POST['submit']:
-            foo = 'bar'    
+            foo = 'bar'    # placeholder... Stay tuned...
     else:
-        ItemOrderFormset = formset_factory(ItemOrderForm, extra=2)
-        item_formset = ItemOrderFormset()         
+        formset = formset_factory(ItemOrderForm, extra=2)
+        item_formset = formset(prefix="items")
 
     context['item_formset'] = item_formset
     context['vendors'] = Vendor.objects.all()

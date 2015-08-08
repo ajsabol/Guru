@@ -22,7 +22,6 @@ urlpatterns = patterns('',
     url(r'^items', 'specialOrders.views.item_manager', name='items'),
     url(r'^admin/', include(admin.site.urls), name='admin'),
     url(r'^neworder', 'specialOrders.views.new_order_entry', name='neworder'),
-    url(r'^submitneworder', 'specialOrders.views.new_order_submit', name='submitneworder'),
     url(r'^login/$',
         'django.contrib.auth.views.login',
         {
