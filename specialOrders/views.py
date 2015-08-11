@@ -109,17 +109,20 @@ def item_manager(request):
 
     return render(request, 'app/items.html', context)
 
-def new_order_entry(request):
+def new_order_entry(request: object):
     from django.forms import formset_factory
-    from .models import Vendor
+    from .models import Vendor, Order, Order_item
     from .utils import order_validator
     from .forms import ItemOrderForm
+    from django.utils import timezone
 
     formset = formset_factory(ItemOrderForm, extra=2)
     context = dict()
 
     if request.method == "POST":
-        if request.POST['add']:
+        is_add_more = request.POST.get('add', False)
+        is_submit = request.POST.get('submit', False)
+        if is_add_more or is_submit:
             # Validate the supplied order info
             order_info = {
                 'order_contact_name': request.POST['order_contact_name'],
@@ -139,8 +142,21 @@ def new_order_entry(request):
             post_copy['items-TOTAL_FORMS'] = int(post_copy['items-TOTAL_FORMS']) + 2
             item_formset = formset(post_copy, prefix="items")
 
-        elif request.POST['submit']:
-            foo = 'bar'    # placeholder... Stay tuned...
+            # Form validation happened above. Test for any form errors and if all is good, add the order to the DB
+            if is_submit and not len(ov['errors']) > 0 and item_formset.is_valid():
+
+                o = Order(order_date=timezone.now(),
+                          order_contact_name=context['resub_order_info']['order_contact_name'],
+                          order_contact_phone=context['resub_order_info']['order_contact_phone'],
+                          order_contact_email=context['resub_order_info']['order_contact_email'],
+                          order_is_complete=False
+                          )
+                o.save()
+
+
+                return render(request, 'app/newordersuccess.html', context)
+
+
     else:
         formset = formset_factory(ItemOrderForm, extra=2)
         item_formset = formset(prefix="items")

@@ -1,0 +1,18 @@
+{% extends "app/layout.html" %}
+
+{% block content %}
+
+<p><strong>Here's what we got...</strong></p>
+
+    {% for item in resub_order_info %}
+        <p>item</p>
+    {% endfor %}
+<p><strong>And for the items...</strong></p>
+
+    {% for item in cleaned_item_info %}
+        {% for i in item %}
+            <p>{{ i }}</p>
+        {% endfor %}
+    {% endfor %}
+
+{% endblock %}

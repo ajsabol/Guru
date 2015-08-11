@@ -35,6 +35,8 @@ def order_validator(order_info):
                 checked_order_info['order_contact_phone'] = phone_number
             else:
                 errors.append("The provided phone number is invalid")
+        else:
+            checked_order_info['order_contact_phone'] = ''
 
         # check order_contact_email if it was supplied
         if order_info['order_contact_email']:
@@ -42,4 +44,6 @@ def order_validator(order_info):
                 checked_order_info['order_contact_email'] = order_info['order_contact_email']
             else:
                 errors.append("The provided email address is invalid")
+        else:
+            checked_order_info['order_contact_email'] = ''
     return {'order_info': checked_order_info, 'errors': errors}
