@@ -145,6 +145,7 @@ def new_order_entry(request: object):
             # Form validation happened above. Test for any form errors and if all is good, add the order to the DB
             if is_submit and not len(ov['errors']) > 0 and item_formset.is_valid():
 
+                # Save the Order details
                 o = Order(order_date=timezone.now(),
                           order_contact_name=context['resub_order_info']['order_contact_name'],
                           order_contact_phone=context['resub_order_info']['order_contact_phone'],
@@ -153,6 +154,16 @@ def new_order_entry(request: object):
                           )
                 o.save()
 
+                # Now deal with the Order_item entries
+                for form in item_formset:
+                    oi = Order_item(item_order=o,
+                                    item_vendor=form.cleaned_data['item_vendor'],
+                                    item_sku=form.cleaned_data['item_sku'],
+                                    item_descr=form.cleaned_data['item_descr'],
+                                    item_qty=form.cleaned_data['item_qty'],
+                                    item_paid=form.cleaned_data['item_paid'],
+                                    )
+                    oi.save()
 
                 return render(request, 'app/newordersuccess.html', context)
 
